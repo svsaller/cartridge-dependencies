@@ -1,0 +1,6 @@
+assigner,application,dependency
+sld_system_app,SLDSystem,DemoCartridges
+test_app_sf,BusinessTestSF,DemoCartridges
+test_app_sf,ConsumerTestSF,DemoCartridges
+as_headless,REST,DemoCartridges
+as_backoffice,EnterpriseBackoffice,DemoCartridges
