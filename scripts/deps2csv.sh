@@ -4,16 +4,16 @@
 # quick and dirty shell script to look up "cartridge.descriptor" files, parse then and 
 # write the found dependencies to a CSV file
 
-if [ "$#" -ne 2 ]
-then
-  echo "Usage: deps2csv.sh <start dir> <output csv file>"
-  echo ""
-  exit 1
-fi
+echo "Usage: deps2csv.sh [<start dir> [<output csv file>]]"
 
-STARTDIR=$1
-TARGET=$2
-PROPERTY="cartridge.dependsOn"
+STARTDIR=${1:-$ICM_BASE_DIR}
+DEFAULTDIR="${EXPORT_DIR:-.}"
+DEFAULTTARGET="$DEFAULTDIR/deps.csv"
+TARGET="${2:-$DEFAULTTARGET}"
+
+echo "STARTDIR: $STARTDIR ; TARGET: $TARGET"
+
+PROPERTY="cartridge.dependsOnDirectly"
 
 echo "cartridge,dependencies" >> $TARGET
 for DESC in $(find $STARTDIR -name 'cartridge.descriptor' -not -path "*/META-INF/*")
