@@ -1,7 +1,7 @@
 //delete all
 match (n) detach delete n
 
-//load cartridge dependencies
+//load cartridge dependencies - use file:///deps.csv for local import file
 LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/svsaller/cartridge-dependencies/develop/import/deps.csv' AS row
 MERGE (c:Cartridge {name: row.cartridge})
 WITH c, row
@@ -9,7 +9,7 @@ UNWIND split(row.dependencies, ':') AS dep
 MERGE (d:Cartridge {name: dep})
 MERGE (c)-[r:DEPENDS_ON]->(d)
 
-//load app-cartridge assignments
+//load app-cartridge assignments - use file:///apps.csv for local import file
 LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/svsaller/cartridge-dependencies/develop/import/apps.csv' AS row
 MERGE (app:App {name: row.application})
 WITH app, row
@@ -18,7 +18,7 @@ MERGE (cartridge:Cartridge {name: assignment})
 WITH app, cartridge, row
 MERGE (app)-[:DEPENDS_ON {assigner: row.assigner, isOptional: row.isOptional, isExtension: row.isExtension}]->(cartridge)
 
-//load app-subprovider dependencies
+//load app-subprovider dependencies - use file:///apps-sub.csv for local import file
 LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/svsaller/cartridge-dependencies/develop/import/apps-sub.csv' AS row
 MERGE (app:App {name: row.application})
 MERGE (dep:App {name: row.dependency})
