@@ -24,3 +24,14 @@ MERGE (app:App {name: row.application})
 MERGE (dep:App {name: row.dependency})
 WITH app, dep, row
 MERGE (app)-[:DEPENDS_ON {assigner: row.assigner, isSubprovider: 'true'}]->(dep)
+
+// find bc_ cartridges (except _test cartridges) which depend on ac_ cartridges
+MATCH (s:Cartridge), (d:Cartridge)
+WHERE (s.name STARTS WITH 'bc_' and not s.name ends WITH '_test') 
+    AND d.name STARTS WITH 'ac_' 
+    AND (s)-->(d)
+RETURN s, d
+
+// how SMBResponsive depends on monitor
+MATCH p=((a:App {name: 'SMBResponsive'}) -[*1..8]-> (c:Cartridge {name: 'monitor'})) 
+RETURN p
